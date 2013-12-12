@@ -4,7 +4,11 @@ Rendering integration with [libRocket](https://github.com/lloydw/libRocket) via 
 
 # Usage
 
-Usage is quite simple and straight-foward, you simply create an object of `RenderInterface` and set the size of it and register it to libRocket, via `Rocket::Core::SetRenderInteface()`.
+Usage is quite simple and straight-foward, you simply create an object of `RenderInterface`, set the size (typically the size of your window) and register it to libRocket, via `Rocket::Core::SetRenderInteface()`.
+
+# Dependencies
+
+This requires my [image loader library](https://github.com/miguelishawt/LoadImage), alternatively instead of getting my library, you can write your own code to load images for libRocket. See `LoadTexture` within the `RenderInterface`.
 
 # NOTES
 
