@@ -12,7 +12,7 @@ This requires my [image loader library](https://github.com/miguelishawt/LoadImag
 
 # NOTES
 
-The RenderInteface uses a Flat2D shader, provided by Magnum. If memory is your concern it may be of you to actually create your own Flat2D shader, and use it with the RenderInterface. You may do this by uncommenting `#define LIBROCKET_MAGNUM_CREATE_SHADER`. Once this is done, you may provide the shader by: (1) the constructor or (2) the `setShader(Shader&)` method. Your shader MUST have texturing enabled, otherwise it will not work.
+The RenderInteface uses a Flat2D shader, provided by Magnum. If memory is your concern you may want to actually create your own Flat2D shader (so you can still use the shader in your own rendering code), and use the pre-compiled/linker Flat2D shader with the RenderInterface. You may do this by uncommenting `#define LIBROCKET_MAGNUM_CREATE_SHADER`. Once this is done, you may provide the shader by: (1) the constructor or (2) the `setShader(Shader&)` method. Your shader MUST have texturing enabled, otherwise it will not work.
 
 # License
 Copyright (C) 2013 Miguel Martin (miguel.martin7.5@hotmail.com)
