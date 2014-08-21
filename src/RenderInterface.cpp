@@ -57,14 +57,14 @@ Rocket::Core::CompiledGeometryHandle RenderInterface::CompileGeometry(Rocket::Co
     
     if(num_indices)
     {
-        geometry->index.setData({indices, sizeof(int) * num_indices}, Buffer::Usage::StaticDraw);
+        geometry->index.setData({indices, num_indices}, Buffer::Usage::StaticDraw);
         
         geometry->mesh
         .setIndexCount(num_indices)
         .setIndexBuffer(geometry->index, 0, Magnum::Mesh::IndexType::UnsignedInt);
     }
     
-    geometry->vbo.setData({vertices, sizeof(Rocket::Core::Vertex) * num_vertices}, Buffer::Usage::StaticDraw);
+    geometry->vbo.setData({vertices, num_vertices}, Buffer::Usage::StaticDraw);
     
     geometry->mesh
     .setPrimitive(Magnum::Mesh::Primitive::Triangles)
