@@ -1,3 +1,28 @@
+///
+/// Magnum-libRocket
+/// libRocket's RenderInterface implemented with Magnum
+///
+/// Copyright (C) 2014 Miguel Martin (miguel@miguel-martin.com)
+///
+/// Permission is hereby granted, free of charge, to any person obtaining a copy
+/// of this software and associated documentation files (the "Software"), to deal
+/// in the Software without restriction, including without limitation the rights
+/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+/// copies of the Software, and to permit persons to whom the Software is
+/// furnished to do so, subject to the following conditions:
+///
+/// The above copyright notice and this permission notice shall be included in
+/// all copies or substantial portions of the Software.
+///
+/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+/// THE SOFTWARE.
+///
+
 #include "RenderInterface.h"
 
 #include <memory>
@@ -17,7 +42,7 @@ using namespace Magnum;
 
 namespace
 {
-    Matrix3 myOrtho(float left, float right, float bottom, float top)
+    Matrix3 ortho(float left, float right, float bottom, float top)
     {
         return Matrix3::projection({right-left, top-bottom}) * Matrix3::translation({-(left+right) / 2, -(top+bottom) /2});
     }
@@ -31,11 +56,12 @@ struct Geometry
     Magnum::Texture2D* texture;
 };
 
-RenderInterface::RenderInterface()
+
+RenderInterface::RenderInterface() :
 #ifdef LIBROCKET_MAGNUM_CREATE_SHADER
-: _shader(Shaders::Flat2D::Flag::Textured)
+ _shader(Shaders::Flat2D::Flag::Textured)
 #else
-: _shader(nullptr)
+ _shader(nullptr)
 #endif // LIBROCKET_MAGNUM_CREATE_SHADER
 {
 }
@@ -80,7 +106,7 @@ void RenderInterface::RenderCompiledGeometry(Rocket::Core::CompiledGeometryHandl
 {
 	Geometry* geo = (Geometry*)geometry;
     
-    _shader.setTransformationProjectionMatrix(myOrtho(0, _size.x(), _size.y(), 0) * Matrix3::translation({pos.x, pos.y}));
+    _shader.setTransformationProjectionMatrix(ortho(0, _size.x(), _size.y(), 0) * Matrix3::translation({pos.x, pos.y}));
     
     geo->texture->bind(Shader::TextureLayer);
     

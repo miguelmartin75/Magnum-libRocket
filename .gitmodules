@@ -1,0 +1,3 @@
+[submodule "LoadImage"]
+	path = LoadImage
+	url = https://github.com/miguelmartin75/LoadImage.git
