@@ -21,11 +21,12 @@
 /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 /// THE SOFTWARE.
-///
-
-///
-/// Pre-processor Configuration:
 /// 
+/// ------------------------------------------------------------------------------
+///
+/// PRE-PROCESSOR CONFIGURATION:
+/// ===========================
+///
 /// MLR_CUSTOM_SHADER
 ///
 ///   A flag to determine if we should be using a custom shader,
@@ -53,79 +54,61 @@
 #include <Rocket/Core/RenderInterface.h>
 
 #ifdef MLR_CUSTOM_SHADER
-#include MLR_CUSTOM_SHADER_PATH
+    #include MLR_CUSTOM_SHADER_PATH
 #else
-typedef Magnum::Shader
+    #include <Magnum/Shaders/Flat.h>
 #endif // CUSTOM_SHADER
 
-#include <Magnum/Shaders/Flat.h>
-
-// Uncomment or add to compiler flags
-// for the render interface to create a shader.
-//#define LIBROCKET_MAGNUM_CREATE_SHADER
 
 namespace mlr
 {
+    typedef
+#ifdef MLR_CUSTOM_SHADER
+    MLR_CUSTOM_SHADER_NAME 
+#else
+    Magnum::Shaders::Flat2D 
+#endif // MLR_CUSTOM_SHADER
+    Shader;
+
+    typedef Magnum::Vector2ui Dimension;
+
     class RenderInterface : public Rocket::Core::RenderInterface
     {
     public:
 
-        typedef Magnum::Shaders::Flat2D Shader;
+        RenderInterface()
+        RenderInterface(Shader& shader, const Dimension& dimension);
 
-        RenderInterface();
+        /// Set the shader the RenderInterface is using.
+        /// \param shader The shader you wish to use, null if nothing
+        void setShader(Shader* shader) { _shader = shader; }
+        Shader* getShader() const { return _shader; }
 
-#ifndef LIBROCKET_MAGNUM_CREATE_SHADER
-        /// \note shader MUST have texturing enabled.
-        RenderInterface(Shader& shader) : _shader(&shader)
-        {
-        }
+        /// Retrieves the size of where libRocket will draw to
+        const Dimension& getSize() { return _size; }
+        /// Sets the size of where libRocket will draw to
+        /// \param size The size you wish to set it to
+        void setSize(const Dimension& size) { _size = size; }
 
-        void setShader(Shader& shader) { _shader = &shader; }
-#endif
+        // OVERRIDDEN FUNCTIONS
 
-        /// Sets the size of the rendering context
-        void setSize(unsigned int width, unsigned int height);
-
-        virtual void RenderGeometry(Rocket::Core::Vertex* vertices, int num_vertices, int* indices, int num_indices, Rocket::Core::TextureHandle texture, const Rocket::Core::Vector2f& translation);
-
-        virtual Rocket::Core::CompiledGeometryHandle CompileGeometry(Rocket::Core::Vertex* vertices, int num_vertices, int* indices, int num_indices, Rocket::Core::TextureHandle texture);
-
-        virtual void RenderCompiledGeometry(Rocket::Core::CompiledGeometryHandle geometry, const Rocket::Core::Vector2f& translation);
-
-        virtual void ReleaseCompiledGeometry(Rocket::Core::CompiledGeometryHandle geometry);
-
-        virtual void EnableScissorRegion(bool enable);
-
-        virtual void SetScissorRegion(int x, int y, int width, int height);
-
-        virtual bool LoadTexture(Rocket::Core::TextureHandle& texture_handle, Rocket::Core::Vector2i& texture_dimensions, const Rocket::Core::String& source);
-
-        virtual bool GenerateTexture(Rocket::Core::TextureHandle& texture_handle, const Rocket::Core::byte* source, const Rocket::Core::Vector2i& source_dimensions);
-
-        virtual void ReleaseTexture(Rocket::Core::TextureHandle texture);
-
-        Shader& getShader()
-        {
-#ifdef LIBROCKET_MAGNUM_CREATE_SHADER
-            return _shader;
-#else
-            assert(_shader && "Please provide a shader");
-            return *_shader;
-#endif // LIBROCKET_MAGNUM_CREATE_SHADER
-        }
+        virtual void RenderGeometry(Rocket::Core::Vertex* vertices, int num_vertices, int* indices, int num_indices, Rocket::Core::TextureHandle texture, const Rocket::Core::Vector2f& translation) override;
+        virtual Rocket::Core::CompiledGeometryHandle CompileGeometry(Rocket::Core::Vertex* vertices, int num_vertices, int* indices, int num_indices, Rocket::Core::TextureHandle texture) override;
+        virtual void RenderCompiledGeometry(Rocket::Core::CompiledGeometryHandle geometry, const Rocket::Core::Vector2f& translation) override;
+        virtual void ReleaseCompiledGeometry(Rocket::Core::CompiledGeometryHandle geometry) override;
+        virtual void EnableScissorRegion(bool enable) override;
+        virtual void SetScissorRegion(int x, int y, int width, int height) override;
+        virtual bool LoadTexture(Rocket::Core::TextureHandle& texture_handle, Rocket::Core::Vector2i& texture_dimensions, const Rocket::Core::String& source) override;
+        virtual bool GenerateTexture(Rocket::Core::TextureHandle& texture_handle, const Rocket::Core::byte* source, const Rocket::Core::Vector2i& source_dimensions) override;
+        virtual void ReleaseTexture(Rocket::Core::TextureHandle texture) override;
 
     private:
 
         /// The shader the render interface uses
-#ifdef LIBROCKET_MAGNUM_CREATE_SHADER
-        Shader
-#else
-        Shader*
-#endif // LIBROCKET_MAGNUM_CREATE_SHADER
-        _shader;
+        Shader* _shader;
 
         /// The size of the view in the rendering context
-        Magnum::Vector2 _size;
+        Dimension _size;
     };
 }
 #endif // ROCKET_RENDERINTERFACE_H

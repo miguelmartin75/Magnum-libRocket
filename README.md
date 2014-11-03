@@ -4,33 +4,41 @@ Rendering integration with [libRocket](https://github.com/lloydw/libRocket) via 
 
 # Usage
 
-Usage is quite simple and straight-foward, you simply create an object of `RenderInterface`, set the size (typically the size of your window) and register it to libRocket, via `Rocket::Core::SetRenderInteface()`.
+Usage is quite simple and straight-foward, you simply:
+
+- create an object of `mlr::RenderInterface`
+- set the shader for the render interface
+- set the size (typically the size of your window)
+- register it to libRocket, via `Rocket::Core::SetRenderInteface()`.
 
 # Dependencies
 
 This requires my [image loader library](https://github.com/miguelishawt/LoadImage), alternatively instead of getting my library, you can write your own code to load images for libRocket. See `LoadTexture` within the `RenderInterface`.
 
-# NOTES
+# Configuration
 
-The RenderInteface uses a Flat2D shader, provided by Magnum. If memory is your concern you may want to actually create your own Flat2D shader (so you can still use the shader in your own rendering code), and use the pre-compiled/linker Flat2D shader with the RenderInterface. You may do this by uncommenting `#define LIBROCKET_MAGNUM_CREATE_SHADER`. Once this is done, you may provide the shader by: (1) the constructor or (2) the `setShader(Shader&)` method. Your shader MUST have texturing enabled, otherwise it will not work.
+Configuration is can be done manually (obviously), or through a some macros:
+
+## Pre-processor Configuration
+
+### MLR_CUSTOM_SHADER
+
+A flag to determine if we should be using a custom shader,
+if this flag is not defined, it is assumed we will use a 
+Magnum::Shaders::Flat2D shader. You should declare the following
+macros (if you enable this macro):
+
+#### MLR_CUSTOM_SHADER_PATh
+
+The path for the definition of the shader. Note, this
+can't just be a class forward declaration, unless you
+include the approriate file within `RenderInterface.cpp`.
+
+####  MLR_CUSTOM_SHADER_NAME
+
+The name of your custom shader class, e.g. `CustomShader`
+without the `'s.
 
 # License
-Copyright (C) 2013 Miguel Martin (miguel.martin7.5@hotmail.com)
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+See [LICENSE](LICENSE).
