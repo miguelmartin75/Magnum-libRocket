@@ -6,10 +6,11 @@ Rendering integration with [libRocket](https://github.com/lloydw/libRocket) via 
 
 Usage is quite simple and straight-foward, you simply:
 
-- create an object of `mlr::RenderInterface`
-- set the shader for the render interface
-- set the size (typically the size of your window)
-- register it to libRocket, via `Rocket::Core::SetRenderInteface()`.
+- Create an object of `mlr::RenderInterface`
+- Set the shader for the render interface (via ctor or `mlr::RenderInterface::setShader`)
+    - Note this shader must have texturing.
+- Set the size (typically the size of your window), via `mlr::RenderInterface::setSize`.
+- Register it to libRocket, via `Rocket::Core::SetRenderInteface`.
 
 # Dependencies
 
@@ -32,7 +33,7 @@ macros (if you enable this macro):
 
 The path for the definition of the shader. Note, this
 can't just be a class forward declaration, unless you
-include the approriate file within `RenderInterface.cpp`.
+include the appropriate file within `RenderInterface.cpp`.
 
 ####  MLR_CUSTOM_SHADER_NAME
 
