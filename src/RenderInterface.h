@@ -77,7 +77,7 @@ namespace mlr
     public:
 
         RenderInterface()
-        RenderInterface(Shader& shader, const Dimension& dimension);
+        RenderInterface(Shader* shader, const Dimension& dimension);
 
         /// Set the shader the RenderInterface is using.
         /// \param shader The shader you wish to use, null if nothing

@@ -59,8 +59,13 @@ namespace mlr
     };
 
     RenderInterface::RenderInterface() :
-        _shader{nullptr},
-        _dimension{0, 0}
+        RenderInterface(nullptr, Dimension())
+    {
+    }
+
+    RenderInterface::RenderInterface(Shader* shader, const Dimension& dimension) :
+        _shader(shader),
+        _size(dimension)
     {
     }
 
